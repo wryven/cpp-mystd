@@ -6,20 +6,19 @@ namespace mystd
     template<typename T>
     class Array
     {
-
     public:
 
     /* CONSTRUCTORS */
-        
-        // Common Constructors
+
+        // Common-use Constructors
 
         Array(int length);
-        Array(T* data, int length);
+        Array(int* data, int length);
 
-        // Copy & Move Constructors
+        // Copy and Move Constructors
 
-        Array(const Array &other);
-        Array(const Array &&other);
+        Array(Array<T> &other);
+        Array(Array<T> &&other);
 
     /* DESTRUCTOR */
 
@@ -27,54 +26,68 @@ namespace mystd
 
     /* PROPERTIES */
 
-        T* data();
-        int length();
+        T* Data();
+        int Length();
 
-    /* PUBLIC FUNCTIONS */
+    /* METHODS */
 
         // Access & Modifier Methods
 
-        void set(int index, T value);
-        T get(int index) const;
+        void Set(int index, T value);
+        int Get(int index) const;
 
-        // TO-DO: Proper name
+        // Sort Methods
 
-        void slice();
+        void Sort();
+        void ReverseSort();
 
-        // Sorting Methods
+        // Split Methods
 
-        void sort();
-        // TO-DO: What other types of sort are there?
+        void Split(T value);
+        void SplitAt(int index);
 
         // Count Methods
 
-        int count(T item) const;
-        int count(T* items) const;
+        int Count(T value) const;
+        int Count(Array<T> values) const;
+        Array<int> CountsOf(Array<T> values) const;
 
         // Index Methods
 
-        int indexOf(T item) const;
-        int firstIndexOf(T item) const;
-        int lastIndexOf(T item) const;
-        int* indexesOf(T item) const;
+        int IndexOf(T value) const;
+        int FirstIndexOf(T value) const;
+        int LastIndexOf(T value) const;
+
+        Array<int> IndexesOf(T value) const;
+        Array<int> IndexesOf(Array<T> values) const;
 
         // Boolean Methods
-        
-        bool contains(T item) const;
-        bool contains(T* items) const;
-        bool isRepeated(T item) const;
-        bool isRepeated(T* items) const;
-        bool isValid(int index) const;
-        
+
+        bool Contains(T value) const;
+        bool Contains(Array<T> values) const;
+        Array<bool> Contains(Array<T> values) const;
+
+        bool IsRepeated(T value) const;
+        bool AreRepeated(Array<T> values) const;
+
+        bool IsValidIndex(int index) const;
+
+        // Operator Overloads
+
+        T operator [] (int index) const;
+        T& operator [] (int index);
+
     private:
+
     /* MEMBERS */
-
-        T* m_data { nullptr };
-        int m_length { 0 };
     
-    /* PRIVATE FUNCTIONS */
+        T* data { nullptr };
+        int length { 0 };
 
-        void validateIndex(int index) const;
+    /* HELPERS */
+
+        void ValidateIndex(int index) const;
+
     };
 
     /* IMPLEMENTATION */
@@ -83,187 +96,14 @@ namespace mystd
 
     /*** CONSTRUCTORS ***/ 
 
-// Common Constructors
+    /*** DESTRUCTOR ***/
 
-template<typename T> 
-Array<T>::Array(int length)
-{
-    m_data = new T[length]();
-    m_length = length;
-}
+    /*** PROPERTIES ***/
 
-template<typename T> 
-Array<T>::Array(T* data, int length)
-{
-    m_data = new T[length];
-    for (int i = 0; i < length; i++)
-    {
-        m_data[i] = data[i];   
-    }
+    /*** PUBLIC FUNCTIONS ***/
 
-    m_length = length;
-}
+/** PRIVATE **/
 
-// Copy & Move Constructors
-
-template<typename T> 
-Array<T>::Array(const Array &other)
-{
+    /*** PRIVATE FUNCTIONS ***/
 
 }
-
-template<typename T> 
-Array<T>::Array(const Array &&other)
-{
-
-}
-
-/*** DESTRUCTOR ***/
-
-template<typename T> 
-Array<T>::~Array()
-{
-    delete[] m_data;
-    m_data = nullptr;
-    m_length = 0;
-}
-
-/*** PROPERTIES ***/
-
-template<typename T>
-T* Array<T>::data() 
-{
-    return m_data;
-}
-
-template<typename T>
-int Array<T>::length()
-{
-    return m_length;
-}
-
-/*** PUBLIC FUNCTIONS ***/
-
-    // Access & Modifier Methods
-
-template<typename T>
-void Array<T>::set(int index, T value)
-{
-    validateIndex(index);
-    m_data[index] = value;
-}
-
-template<typename T>
-T Array<T>::get(int index) const
-{
-    validateIndex(index);
-    return m_data[index];
-}
-
-    // TO-DO: Proper name
-
-void slice();
-
-    // Sorting Methods
-
-void sort();
-// TO-DO: What other types of sort are there?
-
-    // Count Methods
-
-template<typename T>
-int Array<T>::count(T item) const
-{
-    int count = 0;
-
-    for (int i = 0; i < m_length; i++)
-    {
-        if (m_data[i] == item)
-        {
-            count++;
-        }
-    }
-
-    return count;
-}
-
-template<typename T>
-int Array<T>::count(T* items) const
-{
-    int count = 0;
-
-    for (int i = 0; i < m_length; i++)
-    {
-        // TO-DO: May have to switch to Array<T> for items, or give the size.
-    }
-
-    return count;
-}
-
-    // Index Methods
-
-template<typename T>
-int Array<T>::indexOf(T item) const
-{
-    if (m_length == 0)
-    {
-        return -1; // TO-DO: Temporal, switch for exception or idk.
-    }
-
-    for (int left_i = 0, right_i = m_length - 1; left_i != right_i; left_i++, right_i--)
-    {
-
-    }
-    
-    return -1;
-}
-
-template<typename T>
-int Array<T>::firstIndexOf(T item) const
-{
-    for (int i = 0; i < m_length; i++)
-    {
-        if (m_data[i] == item)
-        {
-            return i;
-        }
-    }
-
-    return -1;
-}
-
-template<typename T>
-int Array<T>::lastIndexOf(T item) const
-{
-    for (int i = m_length - 1; i >= 0; i--)
-    {
-        if (m_data[i] == item)
-        {
-            return i;
-        }
-    }
-
-    return -1;
-}
-
-template<typename T>
-int* Array<T>::indexesOf(T item) const
-{
-    int indexes[count(item)];
-}
-
-    // Boolean Methods
-
-bool contains(T item) const;
-bool contains(T* items) const;
-bool isRepeated(T item) const;
-bool isRepeated(T* items) const;
-bool isValid(int index) const;
-
-    /** PRIVATE **/
-
-/*** PRIVATE FUNCTIONS ***/
-
-}
-
-// TO-DO: I hate C++
